@@ -62,7 +62,7 @@ def crawl():
         if link.text.lower() in ignored_sections:
             continue
         
-        crawl_section(link.text, link['href'])
+        crawl_section(link.text.strip(), link['href'])
 
 
 def crawl_section(name, href):
@@ -78,14 +78,14 @@ def crawl_subsections(name, soup):
         'href': re.compile('.*elizabethweinberg.com.*')
     })
     for ss in subsections:
-        crawl_section(os.path.join(name, ss['title']), ss['href'])
+        crawl_section(os.path.join(name, ss['title'].strip()), ss['href'])
 
         
 def save_photos(name, soup):
     photos = soup.findAll('a', { 'data-type': 'photo' })
     for p in photos:
         url = p.find('img')['data-src'].replace('500x500', '1600x1600')
-        photo_name = url.split('/')[-1]
+        photo_name = url.split('/')[-1].strip()
         archive.save_photo(os.path.join(name, photo_name), url)
 
     
